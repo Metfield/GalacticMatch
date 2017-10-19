@@ -10,6 +10,7 @@ public class MatchTracer : MonoBehaviour
     RaycastHit hit;
     Planet traceRoot;
     float maxTraceDistance;
+    Planet tempPlanet;
 
     private void Start()
     {
@@ -20,55 +21,43 @@ public class MatchTracer : MonoBehaviour
 
     void StartTrace()
     {
-        // Trace ray from screen to world
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        // Raycast to scene and try to fetch a planet
+        tempPlanet = PlanetRayCast();
 
-        // Check for occurrence
-        if (Physics.Raycast(ray, out hit))
+        if (tempPlanet != null)
         {
-            // We hit something! Let's make sure it's a planet
-            if(hit.collider.tag == "Planet")
-            {
-                // Add planet to trace
-                traceRoot = hit.collider.gameObject.GetComponent<Planet>();
-                tracedPlanets.Add(traceRoot);
+            // Add planet to trace
+            traceRoot = tempPlanet;
+            tracedPlanets.Add(traceRoot);
 
-                // Get max trace distance while we're at it
-                // This won't change at runtime, but it's convenient to access it this way
-                maxTraceDistance = traceRoot.GetComponent<SphereCollider>().bounds.size.x;
-            }
-        }
+            // Get max trace distance while we're at it
+            // This won't change at runtime, but it's convenient to access it this way
+            maxTraceDistance = traceRoot.GetComponent<SphereCollider>().bounds.size.x;
+        }        
     }
 
     void UpdateTrace()
     {
-        // Trace ray from screen to world
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        // Raycast to scene and try to fetch a planet
+        tempPlanet = PlanetRayCast();
 
-        // Check for occurrence
-        if (Physics.Raycast(ray, out hit))
+        // We hit something!
+        if (tempPlanet != null)
         {
-            // We hit something! Let's make sure it's a planet
-            if (hit.collider.tag == "Planet")
-            {
-                // Get planet
-                Planet newPlanet = hit.collider.gameObject.GetComponent<Planet>();
+            // We don't care about the same planet
+            if (tracedPlanets.Contains(tempPlanet))
+                return;
 
-                // We don't care about the same planet
-                if (tracedPlanets.Contains(newPlanet))
-                    return;
+            // We only care for neighboring planets
+            if (Vector3.Distance(tracedPlanets[tracedPlanets.Count - 1].transform.position, tempPlanet.transform.position) > (maxTraceDistance * 1.5f)) // Arbitrary 1.2 to add off margin
+                return;
 
-                // We only care for neighboring planets
-                if (Vector3.Distance(tracedPlanets[tracedPlanets.Count - 1].transform.position, newPlanet.transform.position) > (maxTraceDistance * 1.5f)) // Arbitrary 1.2 to add off margin
-                    return;
+            // Only add to trace if planet is of the same kind
+            if (traceRoot.GetPlanetType() != tempPlanet.GetPlanetType())
+                return;
 
-                // Only add to trace if planet is of the same kind
-                if (traceRoot.GetPlanetType() != newPlanet.GetPlanetType())
-                    return;
-
-                // Add planet to trace
-                tracedPlanets.Add(hit.collider.gameObject.GetComponent<Planet>());
-            }
+            // Add planet to trace
+            tracedPlanets.Add(tempPlanet.gameObject.GetComponent<Planet>());
         }
     }
 
@@ -84,6 +73,25 @@ public class MatchTracer : MonoBehaviour
         // Clear fields
         tracedPlanets.RemoveRange(0, tracedPlanets.Count);
         traceRoot = null;
+        tempPlanet = null;
+    }
+
+    Planet PlanetRayCast()
+    {
+        // Trace ray from screen to world
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        // Check for occurrence
+        if (Physics.Raycast(ray, out hit))
+        {
+            // We hit something! Let's make sure it's a planet
+            if (hit.collider.tag == "Planet")
+            {
+                return hit.collider.gameObject.GetComponent<Planet>();
+            }
+        }
+
+        return null;
     }
 
     void PlanetsMatched()

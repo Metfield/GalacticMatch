@@ -316,6 +316,7 @@ GameObject:
   - component: {fileID: 870416649}
   - component: {fileID: 870416648}
   - component: {fileID: 870416650}
+  - component: {fileID: 870416651}
   m_Layer: 0
   m_Name: Board
   m_TagString: Untagged
@@ -361,6 +362,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 30, y: 0, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &870416651
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 870416647}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 30, y: 0, z: 1}
+  m_Center: {x: 0, y: 15, z: 0}
 --- !u!1 &2139601291
 GameObject:
   m_ObjectHideFlags: 0
