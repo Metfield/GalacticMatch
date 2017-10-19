@@ -8,7 +8,7 @@ public class BoardColumn
     PlanetsPool prefabPool;
 
     // Holds planets in column
-    List<Planet> planets;
+    List<GameObject> planets;
 
     // Rows in column
     int rows;
@@ -29,7 +29,7 @@ public class BoardColumn
         this.xPosition = xPosition;
         this.tileSize = tileSize;
 
-        planets = new List<Planet>(rows);
+        planets = new List<GameObject>(rows);
     }
 
     public void Fill()
@@ -40,9 +40,13 @@ public class BoardColumn
 
     void SpawnPlanet(float y)
     {
-        // Create new planet
-        // Pass prefab and material
-        Planet planet = new Planet(prefabPool.GetPlanet(), materials[Random.Range(0, materials.Length)]);
+        // Get new planet from pool
+        GameObject planet = prefabPool.GetPlanet();
+
+        // Initialize planet with material/type
+        planet.GetComponent<Planet>().Init(materials[Random.Range(0, materials.Length)]);
+
+        // Assign position
         planet.gameObject.transform.position = new Vector3(xPosition, y, 0);
 
         // Add it to list

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Planet
+public class Planet : MonoBehaviour
 {
     enum PlanetType
     {
@@ -13,16 +13,12 @@ public class Planet
         JUPITER
     }
 
-    public GameObject gameObject;
     PlanetType type;
 
-    public Planet(GameObject gameObject, Material material)
+    public void Init(Material material)
     {
-        // Copy gameobject
-        this.gameObject = gameObject;
-
         // Assign material
-        GetMaterial(material);        
+        GetMaterial(material);
     }
 
     void GetMaterial(Material material)
@@ -57,7 +53,7 @@ public class Planet
 
     void Update()
     {
-        Debug.Log("NO WAY YO!");
-        gameObject.transform.Rotate(0, Time.deltaTime * 20, 0);
+        // Rotate planet
+        gameObject.transform.Rotate(0, -Time.deltaTime * 20, 0);
     }
 }
