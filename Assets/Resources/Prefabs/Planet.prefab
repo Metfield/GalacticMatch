@@ -26,7 +26,7 @@ GameObject:
   - component: {fileID: 114805726733819370}
   m_Layer: 0
   m_Name: Planet
-  m_TagString: Untagged
+  m_TagString: Planet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -109,7 +109,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4302784fe20b2aa4aae8d76f03699e5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameObject: {fileID: 0}
 --- !u!135 &135950175540578884
 SphereCollider:
   m_ObjectHideFlags: 1

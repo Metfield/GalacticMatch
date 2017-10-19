@@ -37,7 +37,7 @@ public class BoardColumn
     public void Fill()
     {
         // Fill column
-        for(int i = 0; i < rows; i++)
+        for (int i = 0; i < rows; i++)
             SpawnPlanet(i * tileSize);
 
         // Save spawning point for later
@@ -50,12 +50,22 @@ public class BoardColumn
         Planet planet = prefabPool.GetPlanet().GetComponent<Planet>();
 
         // Initialize planet with material/type
-        planet.Init(materials[Random.Range(0, materials.Length)]);
+        planet.Init(materials[Random.Range(0, materials.Length)], this);
 
         // Assign position
         planet.gameObject.transform.position = new Vector3(xPosition, y, 0);
 
         // Add it to list
         planets.Add(planet);
+    }
+
+    public void ConsumePlanet(Planet planet)
+    {
+        // Remove planet from list
+        planets.Remove(planet);
+
+        // Add new one
+        // TODO: Implement spawn cooldown!
+        SpawnPlanet(spawnPointY);
     }
 }

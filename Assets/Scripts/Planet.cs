@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Planet : MonoBehaviour
 {
-    enum PlanetType
+    public enum PlanetType
     {
         VENUS,
         EARTH,
@@ -14,11 +14,26 @@ public class Planet : MonoBehaviour
     }
 
     PlanetType type;
+    BoardColumn hostColumn;
 
-    public void Init(Material material)
+    public void Init(Material material, BoardColumn boardColumn)
     {
         // Assign material
         GetMaterial(material);
+
+        // Assign host column
+        hostColumn = boardColumn;
+    }
+
+    public void Consume()
+    {
+        gameObject.SetActive(false);
+        hostColumn.ConsumePlanet(this);
+    }
+
+    public PlanetType GetPlanetType()
+    {
+        return type;
     }
 
     void GetMaterial(Material material)
@@ -26,8 +41,11 @@ public class Planet : MonoBehaviour
         // Assign material
         gameObject.GetComponent<Renderer>().material = material;
 
+        string planetName = material.ToString();
+        planetName = planetName.Substring(0, material.ToString().IndexOf(' '));
+
         // Assign type
-        switch (material.ToString())
+        switch (planetName)
         {
             case "Venus":
                 type = PlanetType.VENUS;
