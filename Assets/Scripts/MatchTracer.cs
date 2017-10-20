@@ -28,6 +28,7 @@ public class MatchTracer : MonoBehaviour
         {
             // Add planet to trace
             traceRoot = tempPlanet;
+            traceRoot.SetHighlight(true);
             tracedPlanets.Add(traceRoot);
 
             // Get max trace distance while we're at it
@@ -56,7 +57,8 @@ public class MatchTracer : MonoBehaviour
             if (traceRoot.GetPlanetType() != tempPlanet.GetPlanetType())
                 return;
 
-            // Add planet to trace
+            // Highlight planet and add to trace
+            tempPlanet.SetHighlight(true);
             tracedPlanets.Add(tempPlanet.gameObject.GetComponent<Planet>());
         }
     }
@@ -69,11 +71,9 @@ public class MatchTracer : MonoBehaviour
             // Hurray!!
             PlanetsMatched();
         }
-        
+
         // Clear fields
-        tracedPlanets.RemoveRange(0, tracedPlanets.Count);
-        traceRoot = null;
-        tempPlanet = null;
+        CleanTrace();
     }
 
     Planet PlanetRayCast()
@@ -101,6 +101,18 @@ public class MatchTracer : MonoBehaviour
         {
             planet.Consume();
         }
+    }
+
+    void CleanTrace()
+    {
+        foreach (Planet planet in tracedPlanets)
+        {
+            planet.SetHighlight(false);
+        }
+
+        tracedPlanets.RemoveRange(0, tracedPlanets.Count);
+        traceRoot = null;
+        tempPlanet = null;
     }
 
 	// Update is called once per frame

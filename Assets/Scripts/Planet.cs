@@ -16,6 +16,8 @@ public class Planet : MonoBehaviour
     PlanetType type;
     BoardColumn hostColumn;
 
+    float rotationSpeed;
+
     public void Init(Material material, BoardColumn boardColumn)
     {
         // Assign material
@@ -23,12 +25,24 @@ public class Planet : MonoBehaviour
 
         // Assign host column
         hostColumn = boardColumn;
+
+        // Init rotation speed
+        rotationSpeed = 20;
     }
 
+    // Planet is being touched/released
+    public void SetHighlight(bool highlightOn)
+    {
+        // Alter shader
+        gameObject.GetComponent<Renderer>().material.SetFloat("_Metallic", highlightOn ? 1.0f : 0.0f);
+    }
+
+    // Explode the planet!
     public void Consume()
     {
         gameObject.SetActive(false);
         hostColumn.ConsumePlanet(this);
+        SetHighlight(false);
     }
 
     public PlanetType GetPlanetType()
@@ -72,6 +86,6 @@ public class Planet : MonoBehaviour
     void Update()
     {
         // Rotate planet
-        gameObject.transform.Rotate(0, -Time.deltaTime * 20, 0);
+        gameObject.transform.Rotate(0, -Time.deltaTime * rotationSpeed, 0);
     }
 }
