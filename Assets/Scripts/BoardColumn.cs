@@ -25,6 +25,8 @@ public class BoardColumn
     [SerializeField]
     float spawnCooldownInSecs = 0.45f;
 
+    AudioManager audioManager;
+
     // Materials available when spawning
     // This determines the type of planet (tile)
     Material[] materials;
@@ -39,19 +41,21 @@ public class BoardColumn
         this.tileSize = tileSize;
 
         planets = new List<Planet>(rows);
+
+        audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
     }
 
     public void Fill()
     {
         // Fill column
         for (int i = 0; i < rows; i++)
-            SpawnPlanet(i * tileSize);
+            SpawnPlanet(i * tileSize, true);
 
         // Save spawning point for later
         spawnPointY = (rows * tileSize);
     }
 
-    void SpawnPlanet(float y)
+    void SpawnPlanet(float y, bool isFirstSpawn = false)
     {
         // Get new planet from pool
         Planet planet = prefabPool.GetPlanet().GetComponent<Planet>();
@@ -64,6 +68,10 @@ public class BoardColumn
 
         // Add it to list
         planets.Add(planet);
+
+        // Play sound
+        if(!isFirstSpawn)
+            audioManager.PlaySFX(AudioClips.SFX_PLANET_SPAWN);
     }
 
     public void ConsumePlanet(Planet planet)

@@ -92,7 +92,7 @@ public class GameMain : MonoBehaviour
     void OnGameOver()
     {
         gameHasStarted = false;
-        audioManager.SetBGMVolume(0.3f);
+        audioManager.SetBGMVolume(0.5f);
 
         // Turn off matchtracer
         matchTracer.enabled = false;

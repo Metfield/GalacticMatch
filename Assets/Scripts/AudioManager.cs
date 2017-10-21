@@ -7,11 +7,14 @@ public class AudioManager : MonoBehaviour
     Dictionary<string, AudioClip> sfxClips, bgmClips;
     AudioSource audioSource, musicSource;
 
+    bool canPlayClip;
+
 	// Use this for initialization
 	void Start ()
     {
         // Get audio source component
         audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.priority = 240;
 
         // Create music audio source
         musicSource = gameObject.AddComponent<AudioSource>();
@@ -24,6 +27,8 @@ public class AudioManager : MonoBehaviour
 
         LoadAudioClips(bgmClips, "Audio/BGM");
         LoadAudioClips(sfxClips, "Audio/SFX");
+
+        canPlayClip = true;
     }
 
     public void PlayBGM(string name)
@@ -34,7 +39,16 @@ public class AudioManager : MonoBehaviour
 
     public void PlaySFX(string clipName)
     {
-        audioSource.PlayOneShot(sfxClips[clipName]);
+        // Prevent multiple clips to play at the same time
+        if (canPlayClip)
+        {
+            canPlayClip = false;
+
+            audioSource.pitch = Random.Range(0.95f, 1.05f);
+            audioSource.PlayOneShot(sfxClips[clipName]);
+
+            StartCoroutine(ResetCanPlay());
+        }
     }
 
     public void SetBGMVolume(float volume)
@@ -50,5 +64,11 @@ public class AudioManager : MonoBehaviour
             clipsDictionary.Add(clip.name, clip);
             clip.LoadAudioData();
         }
+    }
+
+    IEnumerator ResetCanPlay()
+    {
+        yield return new WaitForSeconds(0.2f);
+        canPlayClip = true;
     }
 }
