@@ -58,4 +58,10 @@ public class Board : MonoBehaviour
     {
         return Resources.LoadAll<Material>("Planets/Materials/");
     }
+
+    void Update()
+    {
+        foreach (BoardColumn column in columns)
+            column.Update();
+    }
 }

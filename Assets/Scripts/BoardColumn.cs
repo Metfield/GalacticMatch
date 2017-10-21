@@ -18,6 +18,13 @@ public class BoardColumn
     float xPosition;
     float tileSize;
 
+    // Variables used for spawning cooldown
+    bool planetIsSpawning;
+    float cooldownTimeStamp;
+
+    [SerializeField]
+    float spawnCooldownInSecs = 0.45f;
+
     // Materials available when spawning
     // This determines the type of planet (tile)
     Material[] materials;
@@ -64,8 +71,25 @@ public class BoardColumn
         // Remove planet from list
         planets.Remove(planet);
 
-        // Add new one
-        // TODO: Implement spawn cooldown!
-        SpawnPlanet(spawnPointY);
+        // Explosion particles?
+        
+        
+    }
+
+    public void Update()
+    {
+        // Spawn a planet if it's missing
+        if(planets.Count < rows)
+        {
+            if (cooldownTimeStamp <= Time.time)
+                planetIsSpawning = false;
+
+            if (!planetIsSpawning)
+            {
+                planetIsSpawning = true;
+                SpawnPlanet(spawnPointY);
+                cooldownTimeStamp = Time.time + spawnCooldownInSecs;
+            }
+        }
     }
 }

@@ -93,6 +93,22 @@ public class GameMain : MonoBehaviour
 
         // Control flag for input
         gameOverActive = true;
+
+        // Set game over score
+        SetGameOverScore();
+    }
+
+    void SetGameOverScore()
+    {
+        Text[] textChildren = gameOverCanvas.GetComponentsInChildren<Text>();
+
+        foreach (Text guiText in textChildren)
+        {
+            if (guiText.name == "GameOverScore")
+            {
+                guiText.text = "Your score  " + score;
+            }
+        }
     }
 
     void GetHUDTextObjects()
