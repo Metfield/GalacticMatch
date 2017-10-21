@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameMain : MonoBehaviour
@@ -12,7 +13,8 @@ public class GameMain : MonoBehaviour
 
     // Canvases
     Canvas hudCanvas,
-           mainMenuCanvas;
+           mainMenuCanvas,
+           gameOverCanvas;
 
     Text timeLeftText;
 
@@ -21,6 +23,8 @@ public class GameMain : MonoBehaviour
     uint scoringMultiplier;
 
     MatchTracer matchTracer;
+
+    bool gameOverActive;
 
     // Use this for initialization
     void Start()
@@ -31,13 +35,15 @@ public class GameMain : MonoBehaviour
         // Get canvases
         hudCanvas = GameObject.Find("HUD").GetComponent<Canvas>();
         mainMenuCanvas = GameObject.Find("MainMenu").GetComponent<Canvas>();
+        gameOverCanvas = GameObject.Find("GameOver").GetComponent<Canvas>();
 
         // Get reference to time left gui and score HUD objects
         GetHUDTextObjects();
         timeLeftText.text = gameTime.ToString("0.00");
 
-        // Hide HUD at start of game
-        hudCanvas.enabled = false;
+        // Hide HUD and GameOver at start of game
+        hudCanvas.gameObject.SetActive(false);
+        gameOverCanvas.gameObject.SetActive(false);
 
         // Arbitrary multiplier
         scoringMultiplier = 5;
@@ -52,10 +58,10 @@ public class GameMain : MonoBehaviour
             gameHasStarted = true;
 
             // Hide mainmenu
-            mainMenuCanvas.enabled = false;
+            mainMenuCanvas.gameObject.SetActive(false);
 
             // Turn on HUD
-            hudCanvas.enabled = true;
+            hudCanvas.gameObject.SetActive(true);
 
             // Create board in scene
             Instantiate(Resources.Load<GameObject>("Prefabs/Board"));
@@ -77,10 +83,16 @@ public class GameMain : MonoBehaviour
     void OnGameOver()
     {
         gameHasStarted = false;
-        timeLeftText.text = "0.00";
 
         // Turn off matchtracer
         matchTracer.enabled = false;
+
+        // Toggle canvases
+        hudCanvas.gameObject.SetActive(false);
+        gameOverCanvas.gameObject.SetActive(true);
+
+        // Control flag for input
+        gameOverActive = true;
     }
 
     void GetHUDTextObjects()
@@ -116,6 +128,13 @@ public class GameMain : MonoBehaviour
 
             if (gameTime < 10)
                 timeLeftText.color = new Color(0.9f, 0.4f, 0.2f);
+        }
+        else if(gameOverActive)
+        {
+            if(Input.GetMouseButtonUp(0))
+            {
+                SceneManager.LoadSceneAsync("Game");
+            }
         }
 	}
 }
