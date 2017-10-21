@@ -26,6 +26,8 @@ public class GameMain : MonoBehaviour
 
     bool gameOverActive;
 
+    AudioManager audioManager;
+
     // Use this for initialization
     void Start()
     {
@@ -47,6 +49,10 @@ public class GameMain : MonoBehaviour
 
         // Arbitrary multiplier
         scoringMultiplier = 5;
+
+        // Play menu music
+        audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+        audioManager.PlayBGM(AudioClips.BGM_TITLE);
     }
 
     public void OnGameStart()
@@ -69,6 +75,9 @@ public class GameMain : MonoBehaviour
             // Create the helper that traces tile matching
             matchTracer = Instantiate(Resources.Load<GameObject>("Prefabs/MatchTracer")).GetComponent<MatchTracer>();
             matchTracer.Init(this);
+
+            // Play in-game music
+            audioManager.PlayBGM(AudioClips.BGM_IN_GAME);
         }
     }
 
@@ -83,6 +92,7 @@ public class GameMain : MonoBehaviour
     void OnGameOver()
     {
         gameHasStarted = false;
+        audioManager.SetBGMVolume(0.3f);
 
         // Turn off matchtracer
         matchTracer.enabled = false;
