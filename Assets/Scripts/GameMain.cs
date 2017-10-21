@@ -159,6 +159,7 @@ public class GameMain : MonoBehaviour
         {
             if(Input.GetMouseButtonUp(0))
             {
+                // For now let's do it the lazy way
                 SceneManager.LoadSceneAsync("Game");
             }
         }

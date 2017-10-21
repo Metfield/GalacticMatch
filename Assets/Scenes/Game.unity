@@ -888,7 +888,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 3.1, y: -270.2}
+  m_AnchoredPosition: {x: 16.94, y: -270.2}
   m_SizeDelta: {x: 283.6, y: 44.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1009514321
@@ -912,10 +912,10 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: 985c5eefc14c68c4fb0f14a2320cc376, type: 3}
-    m_FontSize: 14
+    m_FontSize: 13
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 1
     m_MaxSize: 40
     m_Alignment: 0
     m_AlignByGeometry: 0
@@ -923,7 +923,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "   A game by:\t  Emmanuel Batis"
+  m_Text: '   A game by:  Emmanuel Batis'
 --- !u!222 &1009514322
 CanvasRenderer:
   m_ObjectHideFlags: 0

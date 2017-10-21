@@ -14,11 +14,15 @@ public class MatchTracer : MonoBehaviour
 
     GameMain gameMain;
 
+    LineRenderer lineRenderer;
+
     private void Start()
     {
         // Create objects
         tracedPlanets = new List<Planet>();
         hit = new RaycastHit();
+
+        SetupLineRenderer();
     }
 
     // Set reference to main game
@@ -42,6 +46,11 @@ public class MatchTracer : MonoBehaviour
             // Get max trace distance while we're at it
             // This won't change at runtime, but it's convenient to access it this way
             maxTraceDistance = traceRoot.GetComponent<SphereCollider>().bounds.size.x;
+
+            // Set first point of line renderer
+            lineRenderer.enabled = true;
+            lineRenderer.positionCount++;
+            lineRenderer.SetPosition(0, traceRoot.transform.position);
         }        
     }
 
@@ -68,6 +77,10 @@ public class MatchTracer : MonoBehaviour
             // Highlight planet and add to trace
             tempPlanet.SetHighlight(true);
             tracedPlanets.Add(tempPlanet.gameObject.GetComponent<Planet>());
+
+            // Add position to line
+            lineRenderer.positionCount++;
+            lineRenderer.SetPosition(tracedPlanets.Count - 1, tempPlanet.transform.position);
         }
     }
 
@@ -124,10 +137,28 @@ public class MatchTracer : MonoBehaviour
         tracedPlanets.RemoveRange(0, tracedPlanets.Count);
         traceRoot = null;
         tempPlanet = null;
+
+        lineRenderer.positionCount = 0;
     }
 
-	// Update is called once per frame
-	void Update ()
+    void SetupLineRenderer()
+    {
+        // Create object
+        lineRenderer = gameObject.AddComponent<LineRenderer>();
+        lineRenderer.receiveShadows = false;
+        lineRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        lineRenderer.enabled = false;
+        lineRenderer.startWidth = 0.2f;
+        lineRenderer.endWidth = 0.4f;
+        lineRenderer.positionCount = 0;
+        lineRenderer.startColor = Color.white;
+        lineRenderer.endColor = new Color(1.0f, 0.0f, 0.6f);
+
+        lineRenderer.material = Resources.Load<Material>("Other Materials/LineRender");
+    }
+
+    // Update is called once per frame
+    void Update ()
     {
         // Check for initial tap
         if (Input.GetMouseButtonDown(0))
