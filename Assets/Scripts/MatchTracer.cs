@@ -12,11 +12,19 @@ public class MatchTracer : MonoBehaviour
     float maxTraceDistance;
     Planet tempPlanet;
 
+    GameMain gameMain;
+
     private void Start()
     {
         // Create objects
         tracedPlanets = new List<Planet>();
         hit = new RaycastHit();
+    }
+
+    // Set reference to main game
+    public void Init(GameMain gameMain)
+    {
+        this.gameMain = gameMain;
     }
 
     void StartTrace()
@@ -101,6 +109,9 @@ public class MatchTracer : MonoBehaviour
         {
             planet.Consume();
         }
+
+        // Update score!
+        gameMain.UpdateScore((uint)tracedPlanets.Count);
     }
 
     void CleanTrace()
